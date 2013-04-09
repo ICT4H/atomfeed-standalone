@@ -11,7 +11,7 @@
 
     <properties>
         <spring.version>3.1.0.RELEASE</spring.version>
-        <atomfeed.version>0.9-SNAPSHOT</atomfeed.version>
+        <atomfeed.version>0.9.0</atomfeed.version>
     </properties>
 
     <dependencies>
@@ -106,6 +106,14 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <repositories>
+        <repository>
+            <id>ict4h-sonatype</id>
+            <name>Sonatype OSS Nexus for ICTH4H</name>
+            <url>https://oss.sonatype.org/content/repositories/orgict4h-320/</url>
+        </repository>
+    </repositories>
 
     <profiles>
         <profile>
