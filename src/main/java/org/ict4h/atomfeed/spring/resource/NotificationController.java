@@ -39,7 +39,8 @@ public class NotificationController {
                 entry.getTitle(),
                 DateTime.now(),
                 entry.getUrl(),
-                entry.getContent());
+                entry.getContent(),
+                "standalone");
         eventService.notify(event);
         return showForm(new ModelMap());
     }
