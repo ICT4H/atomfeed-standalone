@@ -2,8 +2,12 @@ package org.ict4h.integration;
 
 import org.ict4h.atomfeed.IntegrationTest;
 import org.ict4h.atomfeed.client.api.AtomFeedClient;
+import org.ict4h.atomfeed.client.api.EventWorker;
 import org.ict4h.atomfeed.client.api.data.Event;
+import org.ict4h.atomfeed.client.domain.Marker;
 import org.ict4h.atomfeed.client.factory.AtomClientFactory;
+import org.ict4h.atomfeed.client.repository.AllFailedEvents;
+import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
 import org.ict4h.atomfeed.server.domain.EventRecord;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
 import org.ict4h.integration.datasource.InMemoryMarkerDataSource;
@@ -25,45 +29,50 @@ import static junit.framework.Assert.assertEquals;
 
 public class AtomFeedClientIT extends IntegrationTest {
 
-        private DbEventRecordCreator recordCreator;
-        private Connection connection;
-        private AllEventRecordsJdbcImpl eventRecords;
-        private AtomFeedClient atomFeedClient;
+    private DbEventRecordCreator recordCreator;
+    private Connection connection;
+    private AllEventRecordsJdbcImpl eventRecords;
+    private AtomFeedClient atomFeedClient;
 
-        @Before
-        public void before() throws SQLException {
-            connection = getConnection();
-            Statement statement = connection.createStatement();
-            statement.execute("TRUNCATE atomfeed.event_records  RESTART IDENTITY;");
-            statement.close();
-            eventRecords = new AllEventRecordsJdbcImpl(getProvider(connection));
-            recordCreator = new DbEventRecordCreator(eventRecords);
-        }
+    @Before
+    public void before() throws SQLException {
+        connection = getConnection();
+        Statement statement = connection.createStatement();
+        statement.execute("TRUNCATE atomfeed.event_records  RESTART IDENTITY;");
+        statement.close();
+        eventRecords = new AllEventRecordsJdbcImpl(getProvider(connection));
+        recordCreator = new DbEventRecordCreator(eventRecords);
+    }
 
-        @After
-        public void after() throws SQLException {
-            connection.close();
-        }
+    @After
+    public void after() throws SQLException {
+        connection.close();
+    }
 
-        @Test
-        public void shouldReadEventsCreatedEvents() throws URISyntaxException, SQLException{
-            List<EventRecord> eventRecords = createEvents(7, "Hello, DiscWorld");
-            URI uri = new URI("http://localhost:8080/feed/2");
-            atomFeedClient = new AtomClientFactory().create(new InMemoryMarkerDataSource());
-            atomFeedClient.processedTo(uri,eventRecords.get(4).getTagUri());
-            List<Event> events = atomFeedClient.unprocessedEvents(uri);
-            assertEquals(2,events.size());
-        }
+    @Test
+    public void shouldReadEventsCreatedEvents() throws URISyntaxException, SQLException {
+        List<EventRecord> events = createEvents(7, "Hello, DiscWorld");
+        final int[] counter = {0};
+        URI uri = new URI("http://localhost:8080/feed/recent");
+        InMemoryMarkerDataSource markerDataSource = new InMemoryMarkerDataSource();
+        markerDataSource.put(new Marker(uri, events.get(4).getTagUri().toString(), new URI("http://localhost:8080/feed/1")));
+        atomFeedClient = new AtomClientFactory().create(markerDataSource, new AllFailedEventsInMemoryImpl());
+        atomFeedClient.processEvents(uri, new EventWorker() {
+            @Override
+            public void process(Event event) {
+                counter[0] += 1;
+            }
+        });
+        assertEquals(2, counter[0]);
+    }
 
-    private List<EventRecord> createEvents(int numberOfEventsToCreate, String titleTemplate) throws URISyntaxException, SQLException
-    {
+    private List<EventRecord> createEvents(int numberOfEventsToCreate, String titleTemplate) throws URISyntaxException, SQLException {
         List<EventRecord> records = new ArrayList<EventRecord>();
         int index = 1;
-        do
-        {
+        do {
             records.add(createOneEvent(String.format("%s%s", titleTemplate, index), String.format("%s%s", "http://google.com?q=", index)));
             index++;
-        }while (index <= numberOfEventsToCreate);
+        } while (index <= numberOfEventsToCreate);
         return records;
     }
 
