@@ -1,12 +1,11 @@
 package org.ict4h.integration;
 
 import org.ict4h.atomfeed.IntegrationTest;
-import org.ict4h.atomfeed.client.api.AtomFeedClient;
-import org.ict4h.atomfeed.client.api.EventWorker;
-import org.ict4h.atomfeed.client.api.data.Event;
+import org.ict4h.atomfeed.client.service.AtomFeedClient;
+import org.ict4h.atomfeed.client.service.EventWorker;
+import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.domain.Marker;
 import org.ict4h.atomfeed.client.factory.AtomClientFactory;
-import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
 import org.ict4h.atomfeed.server.domain.EventRecord;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
