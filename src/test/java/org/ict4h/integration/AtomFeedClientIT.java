@@ -9,7 +9,7 @@ import org.ict4h.atomfeed.client.factory.AtomClientFactory;
 import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
 import org.ict4h.atomfeed.server.domain.EventRecord;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
-import org.ict4h.integration.datasource.InMemoryMarkerDataSource;
+import org.ict4h.atomfeed.client.repository.memory.InMemoryMarkerDataSource;
 import org.ict4h.integration.repository.DbEventRecordCreator;
 import org.junit.After;
 import org.junit.Before;
