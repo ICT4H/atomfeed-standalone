@@ -1,15 +1,15 @@
 package org.ict4h.integration;
 
 import org.ict4h.atomfeed.IntegrationTest;
-import org.ict4h.atomfeed.client.service.AtomFeedClient;
-import org.ict4h.atomfeed.client.service.EventWorker;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.domain.Marker;
 import org.ict4h.atomfeed.client.factory.AtomClientFactory;
 import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
+import org.ict4h.atomfeed.client.repository.memory.AllMarkersInMemoryImpl;
+import org.ict4h.atomfeed.client.service.AtomFeedClient;
+import org.ict4h.atomfeed.client.service.EventWorker;
 import org.ict4h.atomfeed.server.domain.EventRecord;
 import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsJdbcImpl;
-import org.ict4h.atomfeed.client.repository.memory.InMemoryMarkerDataSource;
 import org.ict4h.integration.repository.DbEventRecordCreator;
 import org.junit.After;
 import org.junit.Before;
@@ -53,9 +53,9 @@ public class AtomFeedClientIT extends IntegrationTest {
         List<EventRecord> events = createEvents(7, "Hello, DiscWorld");
         final int[] counter = {0};
         URI uri = new URI("http://localhost:8080/feed/recent");
-        InMemoryMarkerDataSource markerDataSource = new InMemoryMarkerDataSource();
-        markerDataSource.put(new Marker(uri, events.get(4).getTagUri().toString(), new URI("http://localhost:8080/feed/1")));
-        atomFeedClient = new AtomClientFactory().create(markerDataSource, new AllFailedEventsInMemoryImpl());
+        AllMarkersInMemoryImpl allMarkersInMemoryImpl = new AllMarkersInMemoryImpl();
+        allMarkersInMemoryImpl.put(uri, events.get(4).getTagUri().toString(), new URI("http://localhost:8080/feed/1"));
+        atomFeedClient = new AtomClientFactory().create(allMarkersInMemoryImpl, new AllFailedEventsInMemoryImpl());
         atomFeedClient.processEvents(uri, new EventWorker() {
             @Override
             public void process(Event event) {
