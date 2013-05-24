@@ -2,7 +2,6 @@ package org.ict4h.integration;
 
 import org.ict4h.atomfeed.IntegrationTest;
 import org.ict4h.atomfeed.client.domain.Event;
-import org.ict4h.atomfeed.client.domain.Marker;
 import org.ict4h.atomfeed.client.factory.AtomClientFactory;
 import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
 import org.ict4h.atomfeed.client.repository.memory.AllMarkersInMemoryImpl;
@@ -77,7 +76,6 @@ public class AtomFeedClientIT extends IntegrationTest {
 
     private EventRecord createOneEvent(String title, String url) throws URISyntaxException, SQLException {
         EventRecord eventRecord = recordCreator.create(UUID.randomUUID().toString(), title, url, null);
-        connection.commit();
         return eventRecord;
     }
 }
