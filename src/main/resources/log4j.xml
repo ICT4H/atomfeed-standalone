@@ -12,8 +12,8 @@
         <appender-ref ref="console"/>
     </logger>
 
-    <logger name="org.ict4h.atomfeed.server">
-        <level value="warn"/>
+    <logger name="org.ict4h.atomfeed">
+        <level value="debug"/>
         <appender-ref ref="console"/>
     </logger>
 

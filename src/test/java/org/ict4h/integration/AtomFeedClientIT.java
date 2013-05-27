@@ -35,15 +35,15 @@ public class AtomFeedClientIT extends IntegrationTest {
     @Before
     public void before() throws SQLException {
         connection = getConnection();
-        Statement statement = connection.createStatement();
-        statement.execute("TRUNCATE atomfeed.event_records  RESTART IDENTITY;");
-        statement.close();
         eventRecords = new AllEventRecordsJdbcImpl(getProvider(connection));
         recordCreator = new DbEventRecordCreator(eventRecords);
     }
 
     @After
     public void after() throws SQLException {
+        Statement statement = connection.createStatement();
+        statement.execute("TRUNCATE atomfeed.event_records  RESTART IDENTITY;");
+        statement.close();
         connection.close();
     }
 
