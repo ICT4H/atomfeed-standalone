@@ -9,7 +9,7 @@
 
     <context:annotation-config/>
 
-    <context:component-scan base-package="org.ict4h.atomfeed.spring"/>
+    <context:component-scan base-package="org.ict4h.atomfeed"/>
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${jdbc.driverClassName}"/>
@@ -25,6 +25,7 @@
     </bean>
 
     <import resource="classpath:atomFeedContext.xml"/>
+    <import resource="classpath:atomFeedClientContext.xml"/>
 
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
    		<property name="prefix">

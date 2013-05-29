@@ -28,6 +28,11 @@
         </dependency>
         <dependency>
             <groupId>org.ict4h</groupId>
+            <artifactId>atomfeed-client-spring</artifactId>
+            <version>${atomfeed.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ict4h</groupId>
             <artifactId>atomfeed-commons</artifactId>
             <version>${atomfeed.version}</version>
             <classifier>tests</classifier>
@@ -39,11 +44,6 @@
             <version>${atomfeed.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.ict4h</groupId>
-            <artifactId>atomfeed-client</artifactId>
-            <version>${atomfeed.version}</version>
         </dependency>
         <dependency>
             <groupId>postgresql</groupId>
@@ -175,12 +175,18 @@
                     </plugin>
                     <plugin>
                         <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>maven-jetty-plugin</artifactId>
-                        <version>6.1.10</version>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>8.0.1.v20110908</version>
                         <configuration>
-                            <contextPath>/</contextPath>
-                            <tmpDirectory>/tmp</tmpDirectory>
-                            <webAppSourceDirectory>target/atomfeed-standalone-${atomfeed.version}</webAppSourceDirectory>
+                            <systemProperties>
+                                <systemProperty>
+                                    <name>jetty.port</name>
+                                    <value>8080</value>
+                                </systemProperty>
+                            </systemProperties>
+                            <webAppConfig>
+                                <contextPath>/</contextPath>
+                            </webAppConfig>
                             <stopKey>secret</stopKey>
                             <stopPort>6669</stopPort>
                         </configuration>
@@ -189,7 +195,7 @@
                                 <id>start-jetty</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>run-exploded</goal>
+                                    <goal>run</goal>
                                 </goals>
                                 <configuration>
                                     <scanIntervalSeconds>0</scanIntervalSeconds>
