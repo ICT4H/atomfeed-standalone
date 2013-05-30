@@ -9,3 +9,4 @@ atomfeed.iws
 */.project
 .settings/
 activemq-data
+*.log
