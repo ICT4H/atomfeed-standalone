@@ -4,6 +4,7 @@ public class Entry {
     String title;
     private String content;
     private String url;
+    private String category;
 
     public String getTitle() {
         return title;
@@ -27,5 +28,13 @@ public class Entry {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

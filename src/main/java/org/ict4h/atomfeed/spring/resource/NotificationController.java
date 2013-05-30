@@ -52,7 +52,7 @@ public class NotificationController {
                 DateTime.now(),
                 entry.getUrl(),
                 entry.getContent(),
-                "standalone");
+                entry.getCategory());
         eventService.notify(event);
         return showForm(new ModelMap());
     }
