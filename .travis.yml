@@ -4,5 +4,5 @@ jdk:
 env:
   - DB=postgres
 before_install:
-  - sh src/main/resources/setup.sh
+  - sh src/main/resources/db_setup.sh
 script: "mvn integration-test -P IT"
